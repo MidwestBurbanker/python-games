@@ -1,6 +1,6 @@
 import pygame
 import sys
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT, SHOT_RADIUS, PLAYER_SHOOT_SPEED, PLAYER_SHOOT_COOLDOWN_SECONDS
+from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 from logger import log_state, log_event
 from player import Player
 from asteroidfield import AsteroidField
@@ -21,8 +21,8 @@ def main():
     Shot.containers = (shots, updatable, drawable)
 
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
-    print("Screen width: 1280")
-    print("Screen height: 720")
+    print(SCREEN_WIDTH)
+    print(SCREEN_HEIGHT)
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     asteroidfield = AsteroidField()
@@ -42,6 +42,13 @@ def main():
                 log_event("player_hit")
                 print("Game over!")
                 sys.exit()
+
+        for asteroid in asteroids:
+            for shot_fired in shots:
+                if asteroid.collides_with(shot_fired):
+                    log_event("asteroid_shot")
+                    asteroid.kill()
+                    shot_fired.kill()
 
 
         screen.fill("black")
